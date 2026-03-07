@@ -6,8 +6,6 @@
 const fs = require("fs");
 const path = require("path");
 
-const __dirname = __dirname;
-
 const envPath = path.resolve(process.cwd(), ".env");
 
 if (fs.existsSync(envPath)) {
