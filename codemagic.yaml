@@ -2,12 +2,15 @@ workflows:
   build-ios:
     name: Build iOS IPA
     environment:
+      node: v18
       groups:
         - expo_credentials
     scripts:
       - name: Install dependencies
         script: |
-          npm install
+          node --version
+          npm --version
+          npm install --verbose
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli@latest
