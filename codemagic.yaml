@@ -16,3 +16,7 @@ workflows:
           eas build --platform ios --profile simulator
     artifacts:
       - build/*.ipa
+    publishing:
+      email:
+        recipients:
+          - tinchantcamille@outlook.com
