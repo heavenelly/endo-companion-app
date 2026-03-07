@@ -14,6 +14,10 @@ workflows:
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli@latest
+      - name: Clear Metro cache
+        script: |
+          npx expo start --clear
+          sleep 5
       - name: Build iOS IPA
         script: |
           eas build --platform ios --profile simulator
