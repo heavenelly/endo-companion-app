@@ -24,6 +24,10 @@ jobs:
       run: |
         npm install
     
+    - name: Install EAS CLI
+      run: |
+        npm install -g eas-cli
+        
     - name: Build iOS IPA
       env:
         EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
