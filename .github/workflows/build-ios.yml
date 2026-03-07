@@ -32,7 +32,7 @@ jobs:
       env:
         EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       run: |
-        eas login --non-interactive
+        eas login
         
     - name: Build iOS IPA
       run: |
