@@ -29,8 +29,10 @@ jobs:
         npm install -g @expo/cli eas-cli
     
     - name: Login to Expo
+      env:
+        EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       run: |
-        echo "${{ secrets.EXPO_TOKEN }}" | eas login
+        eas login --non-interactive
         
     - name: Build iOS IPA
       run: |
