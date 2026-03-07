@@ -30,7 +30,7 @@ jobs:
     
     - name: Login to Expo
       run: |
-        echo "${{ secrets.EXPO_TOKEN }}" | eas login --non-interactive
+        echo "${{ secrets.EXPO_TOKEN }}" | eas login
         
     - name: Build iOS IPA
       run: |
