@@ -2,8 +2,8 @@ workflows:
   build-ios:
     name: Build iOS IPA
     environment:
-      vars:
-        EXPO_TOKEN: $EXPO_TOKEN
+      groups:
+        - expo_credentials
     scripts:
       - name: Install dependencies
         script: |
