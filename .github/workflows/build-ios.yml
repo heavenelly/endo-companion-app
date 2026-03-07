@@ -26,7 +26,7 @@ jobs:
     
     - name: Install EAS CLI
       run: |
-        npm install -g @expo/cli eas-cli
+        npm install -g eas-cli@latest
         
     - name: Build iOS IPA
       env:
