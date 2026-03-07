@@ -21,6 +21,11 @@
       "ios": {
         "resourceClass": "m-medium"
       }
+    },
+    "simulator": {
+      "ios": {
+        "simulator": true
+      }
     }
   },
   "submit": {
