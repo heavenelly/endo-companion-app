@@ -10,7 +10,7 @@ workflows:
         script: |
           node --version
           npm --version
-          npm install --verbose
+          npm install
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli@latest
