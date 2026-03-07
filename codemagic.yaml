@@ -13,8 +13,6 @@ workflows:
           npm install -g eas-cli@latest
       - name: Build iOS IPA
         script: |
-          export APPLE_ID=$APPLE_ID
-          export APPLE_ID_PASSWORD=$APPLE_ID_PASSWORD
-          eas build --platform ios --profile production --non-interactive
+          eas build --platform ios --profile development
     artifacts:
       - build/*.ipa
