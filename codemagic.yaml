@@ -1,0 +1,44 @@
+workflow:
+  name: Build iOS IPA
+  max_build_duration: 60
+  instance_type: mac_mini_m1
+  environment:
+    node: v18
+    xcode: 15.3
+    cocoapods: default
+  cache:
+    cache_paths:
+      - $HOME/.npm
+      - node_modules
+  triggering:
+    events:
+      - push
+      - pull_request
+    branch_patterns:
+      - pattern: '*'
+        include: true
+        source: true
+
+scripts:
+  - name: Install dependencies
+    script: |
+      npm install
+  - name: Install EAS CLI
+    script: |
+      npm install -g eas-cli@latest
+  - name: Build iOS IPA
+    script: |
+      eas build --platform ios --profile preview --non-interactive
+
+artifacts:
+  - build/*.ipa
+  - build/**/*.ipa
+
+publishing:
+  email:
+    recipients:
+      - tinchantcamille@outlook.com
+  scripts:
+    - name: Publish to Slack
+      script: |
+        echo "Build completed successfully!"
