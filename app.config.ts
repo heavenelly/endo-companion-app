@@ -30,9 +30,9 @@ const env = {
   // App branding - update these values directly (do not use env vars)
   appName: "Endo Companion",
   appSlug: "health-companion",
-  // S3 URL of the app logo - set this to the URL returned by generate_image when creating custom logo
+  // S3 URL of app logo - set this to the URL returned by generate_image when creating custom logo
   // Leave empty to use the default icon from assets/images/icon.png
-  logoUrl: "https://private-us-east-1.manuscdn.com/sessionFile/2cMasfzseC6mTqWUexKUkt/sandbox/vC2kGaBU6gNkpR6SKq5Ai1-img-1_1771273841000_na1fn_ZW5kby1jb21wYW5pb24tbG9nbw.png?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvMmNNYXNmenNlQzZtVHFXVWV4S1VrdC9zYW5kYm94L3ZDMmtHYUJVNmdOa3BSNlNLcTVBaTEtaW1nLTFfMTc3MTI3Mzg0MTAwMF9uYTFmbl9aVzVrYnkxamIyMXdZVzVwYjI0dGJHOW5idy5wbmc~eC1vc3MtcHJvY2Vzcz1pbWFnZS9yZXNpemUsd18xOTIwLGhfMTkyMC9mb3JtYXQsd2VicC9xdWFsaXR5LHFfODAiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3OTg3NjE2MDB9fX1dfQ__&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=S7Rrdkrwdf8JbtKo39sOpygfc1dlePZMu9Yoj5E4EJfEncO8XTiPEHI-VzNDDF32Hv7v82rVjBwHg8Miq4Yrnxi4rVc2i7q8ovwc12t05mblcTcSx9kn5vlPctuOsxEd6EXcpa8xNziTTTPjeq0wWxpZ45hmLZVgV2GuRwI1apD89cUOovew3aCbQcoIA4W23eOarE8OyeLedJTUCz4awqd4ulXRuKmWJiXzXEovemIPsQsSdQLisQEeUlliT79D9y82PvnJ3ks7gX-~o9mnzln734sIqtMWw0cu1R9YiQn0C0kGxgh8Fw7CN~1FUMEiHWnWNZeJUGaF1usuF1SUwg__",
+  logoUrl: "",
   scheme: schemeFromBundleId,
   iosBundleId: bundleId,
   androidPackage: bundleId,
