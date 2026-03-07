@@ -13,6 +13,6 @@ workflows:
           npm install -g eas-cli@latest
       - name: Build iOS IPA
         script: |
-          eas build --platform ios --profile preview --non-interactive
+          eas build --platform ios --profile development
     artifacts:
       - build/*.ipa
