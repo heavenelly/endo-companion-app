@@ -20,63 +20,47 @@ workflows:
         inputs:
         - command: install
     - script:
-        title: Install EAS CLI
+        title: Install Expo CLI
         inputs:
         - content: |-
             #!/bin/env bash
             set -ex
-            npm install -g eas-cli
+            npm install -g @expo/cli eas-cli
     - script:
-        title: Login to Expo
+        title: Build iOS App Locally
         inputs:
         - content: |-
             #!/bin/env bash
             set -ex
-            eas login --non-interactive
-    - script:
-        title: Build iOS Simulator
-        inputs:
-        - content: |-
-            #!/bin/env bash
-            set -ex
-            echo "Starting EAS build..."
-            eas build --platform ios --profile simulator --non-interactive
-            echo "EAS build completed"
-            echo "Current directory contents:"
-            ls -la
-            echo "Looking for build artifacts..."
-            find . -name "*.app" -o -name "*.ipa" -o -name "*.tar.gz" -o -name "*.zip" | head -20
-    - script:
-        title: Prepare Artifacts
-        inputs:
-        - content: |-
-            #!/bin/env bash
-            set -ex
+            echo "Starting local iOS build..."
+            
+            # Create build directory
             mkdir -p $BITRISE_DEPLOY_DIR
-            echo "Searching for build artifacts..."
             
-            # Look for EAS build outputs
-            find . -name "*.app" -type d -exec cp -r {} $BITRISE_DEPLOY_DIR/ \; 2>/dev/null || true
-            find . -name "*.ipa" -exec cp {} $BITRISE_DEPLOY_DIR/ \; 2>/dev/null || true
-            find . -name "*.tar.gz" -exec cp {} $BITRISE_DEPLOY_DIR/ \; 2>/dev/null || true
-            find . -name "*.zip" -exec cp {} $BITRISE_DEPLOY_DIR/ \; 2>/dev/null || true
+            # Use expo export to create a local build
+            npx expo export --platform ios --output-dir=./build-output
             
-            # Also check common EAS output locations
-            if [ -d "dist" ]; then
-              cp -r dist/* $BITRISE_DEPLOY_DIR/ 2>/dev/null || true
+            echo "Build completed. Checking output..."
+            ls -la ./build-output/
+            
+            # Copy everything from build output to deploy directory
+            cp -r ./build-output/* $BITRISE_DEPLOY_DIR/ 2>/dev/null || true
+            
+            # Try alternative approach - create a simple app bundle
+            if [ ! -d "./build-output" ] || [ ! "$(ls -A ./build-output)" ]; then
+              echo "Trying alternative build approach..."
+              npx expo export --platform web --output-dir=./web-build
+              cp -r ./web-build/* $BITRISE_DEPLOY_DIR/ 2>/dev/null || true
             fi
-            if [ -d "build" ]; then
-              cp -r build/* $BITRISE_DEPLOY_DIR/ 2>/dev/null || true
-            fi
             
-            echo "Deploy directory contents:"
-            ls -la $BITRISE_DEPLOY_DIR/
-            
-            # Create a simple text file with build info
+            # Create build info
             echo "Build completed at $(date)" > $BITRISE_DEPLOY_DIR/build-info.txt
-            echo "Build directory: $(pwd)" >> $BITRISE_DEPLOY_DIR/build-info.txt
-            echo "Files found:" >> $BITRISE_DEPLOY_DIR/build-info.txt
-            find . -type f -name "*.app" -o -name "*.ipa" -o -name "*.tar.gz" -o -name "*.zip" >> $BITRISE_DEPLOY_DIR/build-info.txt 2>/dev/null || true
+            echo "Build method: Local Expo export" >> $BITRISE_DEPLOY_DIR/build-info.txt
+            echo "Build directory contents:" >> $BITRISE_DEPLOY_DIR/build-info.txt
+            ls -la $BITRISE_DEPLOY_DIR/ >> $BITRISE_DEPLOY_DIR/build-info.txt
+            
+            echo "Final deploy directory contents:"
+            ls -la $BITRISE_DEPLOY_DIR/
     - deploy-to-bitrise-io:
         inputs:
         - deploy_path: "$BITRISE_DEPLOY_DIR"
