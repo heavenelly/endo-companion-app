@@ -1,7 +1,7 @@
 const config = {
   appId: 'com.endocompanion.app',
   appName: 'Endo Companion',
-  webDir: 'src',
+  webDir: 'www',
   bundledWebRuntime: false,
   server: {
     androidScheme: 'https'
