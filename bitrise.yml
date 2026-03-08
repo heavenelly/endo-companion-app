@@ -39,7 +39,17 @@ workflows:
         - content: |-
             #!/bin/env bash
             set -ex
-            eas build --platform ios --profile simulator --non-interactive
+            eas build --platform ios --profile simulator --non-interactive --output-path ./
+    - script:
+        title: Prepare Artifacts
+        inputs:
+        - content: |-
+            #!/bin/env bash
+            set -ex
+            mkdir -p $BITRISE_DEPLOY_DIR
+            find . -name "*.app" -exec cp -r {} $BITRISE_DEPLOY_DIR/ \;
+            find . -name "*.ipa" -exec cp {} $BITRISE_DEPLOY_DIR/ \;
+            ls -la $BITRISE_DEPLOY_DIR/
     - deploy-to-bitrise-io:
         inputs:
         - deploy_path: "$BITRISE_DEPLOY_DIR"
