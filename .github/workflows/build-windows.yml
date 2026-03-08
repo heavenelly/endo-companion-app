@@ -1,0 +1,37 @@
+name: Build iOS App (Windows Compatible)
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm install
+        
+    - name: Setup Expo CLI
+      run: npm install -g @expo/cli eas-cli
+      
+    - name: Login to Expo
+      run: eas login --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        
+    - name: Build iOS App
+      run: eas build --platform ios --profile simulator --non-interactive
+        
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ios-build
+        path: EndoCompanion.ipa
