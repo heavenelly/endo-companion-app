@@ -39,7 +39,13 @@ workflows:
         - content: |-
             #!/bin/env bash
             set -ex
-            eas build --platform ios --profile simulator --non-interactive --output-path ./
+            echo "Starting EAS build..."
+            eas build --platform ios --profile simulator --non-interactive
+            echo "EAS build completed"
+            echo "Current directory contents:"
+            ls -la
+            echo "Looking for build artifacts..."
+            find . -name "*.app" -o -name "*.ipa" -o -name "*.tar.gz" -o -name "*.zip" | head -20
     - script:
         title: Prepare Artifacts
         inputs:
@@ -47,9 +53,30 @@ workflows:
             #!/bin/env bash
             set -ex
             mkdir -p $BITRISE_DEPLOY_DIR
-            find . -name "*.app" -exec cp -r {} $BITRISE_DEPLOY_DIR/ \;
-            find . -name "*.ipa" -exec cp {} $BITRISE_DEPLOY_DIR/ \;
+            echo "Searching for build artifacts..."
+            
+            # Look for EAS build outputs
+            find . -name "*.app" -type d -exec cp -r {} $BITRISE_DEPLOY_DIR/ \; 2>/dev/null || true
+            find . -name "*.ipa" -exec cp {} $BITRISE_DEPLOY_DIR/ \; 2>/dev/null || true
+            find . -name "*.tar.gz" -exec cp {} $BITRISE_DEPLOY_DIR/ \; 2>/dev/null || true
+            find . -name "*.zip" -exec cp {} $BITRISE_DEPLOY_DIR/ \; 2>/dev/null || true
+            
+            # Also check common EAS output locations
+            if [ -d "dist" ]; then
+              cp -r dist/* $BITRISE_DEPLOY_DIR/ 2>/dev/null || true
+            fi
+            if [ -d "build" ]; then
+              cp -r build/* $BITRISE_DEPLOY_DIR/ 2>/dev/null || true
+            fi
+            
+            echo "Deploy directory contents:"
             ls -la $BITRISE_DEPLOY_DIR/
+            
+            # Create a simple text file with build info
+            echo "Build completed at $(date)" > $BITRISE_DEPLOY_DIR/build-info.txt
+            echo "Build directory: $(pwd)" >> $BITRISE_DEPLOY_DIR/build-info.txt
+            echo "Files found:" >> $BITRISE_DEPLOY_DIR/build-info.txt
+            find . -type f -name "*.app" -o -name "*.ipa" -o -name "*.tar.gz" -o -name "*.zip" >> $BITRISE_DEPLOY_DIR/build-info.txt 2>/dev/null || true
     - deploy-to-bitrise-io:
         inputs:
         - deploy_path: "$BITRISE_DEPLOY_DIR"
