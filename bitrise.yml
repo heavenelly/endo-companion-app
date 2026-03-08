@@ -1,0 +1,46 @@
+format_version: '11'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+workflows:
+  primary:
+    steps:
+    - activate-ssh-key:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone: {}
+    - script:
+        title: Setup Node.js
+        inputs:
+        - content: |-
+            #!/bin/env bash
+            set -ex
+            nvm install 18
+            nvm use 18
+    - npm:
+        title: Install dependencies
+        inputs:
+        - command: install
+    - script:
+        title: Install EAS CLI
+        inputs:
+        - content: |-
+            #!/bin/env bash
+            set -ex
+            npm install -g eas-cli
+    - script:
+        title: Login to Expo
+        inputs:
+        - content: |-
+            #!/bin/env bash
+            set -ex
+            eas login --non-interactive
+    - script:
+        title: Build iOS Simulator
+        inputs:
+        - content: |-
+            #!/bin/env bash
+            set -ex
+            eas build --platform ios --profile simulator --non-interactive
+    - deploy-to-bitrise-io:
+        inputs:
+        - deploy_path: "$BITRISE_DEPLOY_DIR"
+        - is_enable_public_page: 'true'
