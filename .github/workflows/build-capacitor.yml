@@ -1,0 +1,51 @@
+name: Build iOS App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install -g @capacitor/core @capacitor/ios @capacitor/cli
+        
+    - name: Build iOS App
+      run: |
+        cd endo-companion-app
+        
+        # Copy web assets to Capacitor
+        npx cap copy ios
+        
+        # Build the native iOS app
+        npx cap build ios
+        
+        # Create build info
+        echo "Build completed at $(date)" > build-info.txt
+        echo "Build directory: $(pwd)" >> build-info.txt
+        echo "Directory contents:" >> build-info.txt
+        ls -la >> build-info.txt
+        
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ios-app-build
+        path: |
+          ios/App/build/*.ipa
+          ios/App/build/*.app
+          build-info.txt
+        retention-days: 30
