@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endo Companion</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+        .input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+        .icon {
+            font-size: 2em;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌸 Endo Companion</h1>
+        
+        <div class="section">
+            <h2><span class="icon">📊</span>Today's Check-in</h2>
+            <input type="number" class="input" placeholder="Pain level (0-4)" min="0" max="4" id="pain">
+            <input type="number" class="input" placeholder="Energy level (0-4)" min="0" max="4" id="energy">
+            <select class="input" id="mood">
+                <option value="">Select mood</option>
+                <option value="great">Great 😊</option>
+                <option value="good">Good 🙂</option>
+                <option value="okay">Okay 😐</option>
+                <option value="bad">Bad 😕</option>
+                <option value="terrible">Terrible 😢</option>
+            </select>
+            <textarea class="input" placeholder="Notes..." rows="3" id="notes"></textarea>
+            <button class="button" onclick="saveEntry()">💾 Save Entry</button>
+        </div>
+
+        <div class="section">
+            <h2><span class="icon">📅</span>Quick Actions</h2>
+            <button class="button" onclick="viewCalendar()">📆 View Calendar</button>
+            <button class="button" onclick="viewInsights()">📈 View Insights</button>
+            <button class="button" onclick="viewLog()">📝 View Log</button>
+        </div>
+
+        <div class="section">
+            <h2><span class="icon">⚙️</span>Settings</h2>
+            <button class="button" onclick="exportData()">📤 Export Data</button>
+            <button class="button" onclick="showAbout()">ℹ️ About</button>
+        </div>
+    </div>
+
+    <script>
+        function saveEntry() {
+            const entry = {
+                date: new Date().toISOString(),
+                pain: document.getElementById('pain').value,
+                energy: document.getElementById('energy').value,
+                mood: document.getElementById('mood').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            // Save to localStorage
+            let entries = JSON.parse(localStorage.getItem('endoEntries') || '[]');
+            entries.push(entry);
+            localStorage.setItem('endoEntries', JSON.stringify(entries));
+            
+            alert('Entry saved successfully! 💜');
+            
+            // Clear form
+            document.getElementById('pain').value = '';
+            document.getElementById('energy').value = '';
+            document.getElementById('mood').value = '';
+            document.getElementById('notes').value = '';
+        }
+
+        function viewCalendar() {
+            alert('Calendar view coming soon! 📅');
+        }
+
+        function viewInsights() {
+            const entries = JSON.parse(localStorage.getItem('endoEntries') || '[]');
+            alert(`You have ${entries.length} entries. Insights coming soon! 📈`);
+        }
+
+        function viewLog() {
+            const entries = JSON.parse(localStorage.getItem('endoEntries') || '[]');
+            if (entries.length === 0) {
+                alert('No entries yet. Start tracking! 📝');
+                return;
+            }
+            
+            let logText = 'Your Entries:\n\n';
+            entries.slice(-5).reverse().forEach(entry => {
+                const date = new Date(entry.date).toLocaleDateString();
+                logText += `${date}: Pain ${entry.pain}/4, Energy ${entry.energy}/4, Mood: ${entry.mood}\n`;
+            });
+            
+            alert(logText);
+        }
+
+        function exportData() {
+            const entries = JSON.parse(localStorage.getItem('endoEntries') || '[]');
+            const dataStr = JSON.stringify(entries, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'endo-companion-data.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            alert('Data exported! 📤');
+        }
+
+        function showAbout() {
+            alert('Endo Companion v1.0\n\nA simple app to track your endometriosis symptoms and daily wellbeing.\n\nMade with 💜');
+        }
+    </script>
+</body>
+</html>
