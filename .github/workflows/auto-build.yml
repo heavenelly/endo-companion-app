@@ -12,9 +12,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - run: npm install
-      - run: npx expo export --platform ios --output-dir ./dist
+      - name: Install deps
+        run: npm ci
+      - name: Prebuild iOS
+        run: npx expo prebuild --platform ios --clean
+      - name: Build
+        run: |
+          cd ios
+          xcodebuild -workspace EndoCompanion.xcworkspace -scheme EndoCompanion -configuration Debug -destination 'generic/platform=iOS Simulator' build
       - uses: actions/upload-artifact@v4
         with:
           name: ios-app
-          path: dist/
+          path: ios/build/
