@@ -13,13 +13,11 @@ jobs:
         with:
           node-version: 18
       - run: npm install
-      - run: npx expo prebuild --platform ios --clean
-      - run: cd ios && pod install
-      - name: Build
-        run: |
-          cd ios
-          xcodebuild -workspace EndoCompanion.xcworkspace -scheme EndoCompanion -configuration Debug -destination 'generic/platform=iOS Simulator' build
+      - run: npm install -g eas-cli
+      - run: eas build -p ios --profile simulator --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
-          name: ios-app
-          path: ios/build/**/*.app
+          name: ios-build
+          path: build/*.ipa
