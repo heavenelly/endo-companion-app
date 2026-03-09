@@ -1,0 +1,25 @@
+name: Build iOS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm install
+      - run: npx expo prebuild --platform ios --clean
+      - run: cd ios && pod install
+      - name: Build
+        run: |
+          cd ios
+          xcodebuild -workspace EndoCompanion.xcworkspace -scheme EndoCompanion -configuration Debug -destination 'generic/platform=iOS Simulator' build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: ios/build/**/*.app
