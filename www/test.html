@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endo Companion Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .button { background: #007AFF; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌸 Endo Companion Test</h1>
+            <p>Simple test page for Capacitor</p>
+        </div>
+        <div class="button" onclick="testCapacitor()">Test Capacitor Build</div>
+        <div id="output"></div>
+    </div>
+    <script>
+        function testCapacitor() {
+            document.getElementById('output').innerHTML = 'Testing Capacitor functionality...';
+            
+            // Test if Capacitor CLI is available
+            if (window.Capacitor) {
+                document.getElementById('output').innerHTML += '<br>✅ Capacitor CLI is available!';
+            } else {
+                document.getElementById('output').innerHTML += '<br>❌ Capacitor CLI is not available!';
+            }
+        }
+    </script>
+</body>
+</html>

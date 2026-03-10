@@ -1,0 +1,29 @@
+name: Build iOS
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - name: Install dependencies
+      run: npm install
+    - name: Build iOS
+      run: |
+        cd endo-companion-app
+        npm install -g @expo/cli eas-cli
+        eas login --non-interactive
+        eas build --platform ios --profile simulator --non-interactive
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ios-app
+        path: endo-companion-app/build/*.ipa

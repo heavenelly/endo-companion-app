@@ -46,7 +46,6 @@ const config: ExpoConfig = {
   icon: "./assets/images/icon.png",
   scheme: env.scheme,
   userInterfaceStyle: "automatic",
-  newArchEnabled: true,
   extra: {
     eas: {
       projectId: "8b64ed45-91b8-45d3-b15f-ee8883b0bcfa"
@@ -66,84 +65,14 @@ const config: ExpoConfig = {
       backgroundImage: "./assets/images/android-icon-background.png",
       monochromeImage: "./assets/images/android-icon-monochrome.png",
     },
-    edgeToEdgeEnabled: true,
-    predictiveBackGestureEnabled: false,
     package: env.androidPackage,
-    permissions: ["POST_NOTIFICATIONS", "READ_CALENDAR", "WRITE_CALENDAR"],
-    intentFilters: [
-      {
-        action: "VIEW",
-        autoVerify: true,
-        data: [
-          {
-            scheme: env.scheme,
-            host: "*",
-          },
-        ],
-        category: ["BROWSABLE", "DEFAULT"],
-      },
-    ],
   },
   web: {
     bundler: "metro",
     output: "static",
     favicon: "./assets/images/favicon.png",
   },
-  plugins: [
-    "expo-router",
-    [
-      "expo-calendar",
-      {
-        calendarPermission: "Allow $(PRODUCT_NAME) to access your calendar to sync health events.",
-      },
-    ],
-    [
-      "expo-notifications",
-      {
-        icon: "./assets/images/icon.png",
-        color: "#C4A4D4",
-        sounds: [],
-      },
-    ],
-    [
-      "expo-audio",
-      {
-        microphonePermission: "Allow $(PRODUCT_NAME) to access your microphone.",
-      },
-    ],
-    [
-      "expo-video",
-      {
-        supportsBackgroundPlayback: true,
-        supportsPictureInPicture: true,
-      },
-    ],
-    [
-      "expo-splash-screen",
-      {
-        image: "./assets/images/splash-icon.png",
-        imageWidth: 200,
-        resizeMode: "contain",
-        backgroundColor: "#FBF7F4",
-        dark: {
-          backgroundColor: "#2A2520",
-        },
-      },
-    ],
-    [
-      "expo-build-properties",
-      {
-        android: {
-          buildArchs: ["armeabi-v7a", "arm64-v8a"],
-          minSdkVersion: 24,
-        },
-      },
-    ],
-  ],
-  experiments: {
-    typedRoutes: true,
-    reactCompiler: true,
-  },
+  plugins: [],
 };
 
 export default config;
