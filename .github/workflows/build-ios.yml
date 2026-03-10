@@ -3,8 +3,6 @@ name: Build iOS IPA
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -21,21 +19,25 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: |
-        npm install
+      run: npm ci
     
-    - name: Install EAS CLI
+    - name: Generate iOS project
+      run: npx expo prebuild --platform ios --clean
+    
+    - name: List Xcode schemes
+      run: xcodebuild -workspace ios/App/App.xcworkspace -list
+    
+    - name: Build iOS simulator app
       run: |
-        npm install -g eas-cli@latest
-        
-    - name: Build iOS IPA
-      env:
-        EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-      run: |
-        eas build --platform ios --profile simulator --non-interactive
-        
+        xcodebuild -workspace ios/App/App.xcworkspace \
+          -scheme App \
+          -configuration Debug \
+          -destination "platform=iOS Simulator,name=iPhone 15" \
+          -allowProvisioningUpdates \
+          build
+    
     - name: Upload IPA
       uses: actions/upload-artifact@v4
       with:
-        name: ios-ipa
+        name: ios-app
         path: build/*.ipa
