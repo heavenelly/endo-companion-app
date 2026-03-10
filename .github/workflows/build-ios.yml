@@ -1,4 +1,4 @@
-name: Build iOS IPA
+name: Build iOS IPA with EAS
 
 on:
   push:
@@ -15,29 +15,16 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
     
     - name: Install dependencies
       run: npm install --legacy-peer-deps
     
-    - name: Generate iOS project
-      run: npx expo prebuild --platform ios --clean
+    - name: Setup Expo
+      run: npx expo install --fix
     
-    - name: List Xcode schemes
-      run: xcodebuild -workspace ios/App/App.xcworkspace -list
-    
-    - name: Build iOS simulator app
-      run: |
-        xcodebuild -workspace ios/App/App.xcworkspace \
-          -scheme App \
-          -configuration Debug \
-          -destination "platform=iOS Simulator,name=iPhone 15" \
-          -allowProvisioningUpdates \
-          build
-    
-    - name: Upload IPA
-      uses: actions/upload-artifact@v4
-      with:
-        name: ios-app
-        path: build/*.ipa
+    - name: Build iOS with EAS
+      run: npx eas build --platform ios --profile simulator --non-interactive
+      env:
+        EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
