@@ -32,7 +32,7 @@ jobs:
       env:
         EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       run: |
-        eas build --platform ios --profile preview --non-interactive
+        eas build --platform ios --profile simulator --non-interactive
         
     - name: Upload IPA
       uses: actions/upload-artifact@v4
